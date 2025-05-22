@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Decentralized Voting</title>
+</head>
+<body>
+    <h1>Vote for a Candidate</h1>
+    <form id="voteForm">
+        <input type="text" id="voterId" placeholder="Voter ID" required>
+        <select id="candidate">
+            <option value="Candidate A">Candidate A</option>
+            <option value="Candidate B">Candidate B</option>
+        </select>
+        <button type="submit">Vote</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('voteForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const voterId = document.getElementById('voterId').value;
+            const candidate = document.getElementById('candidate').value;
+            
+            const response = await fetch('http://localhost:5000/transactions/new', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    voter_id: voterId,
+                    candidate: candidate
+                }),
+            });
+            const result = await response.json();
+            document.getElementById('result').innerHTML = `Transaction: ${result.message}`;
+        };
+    </script>
+</body>
+</html>
